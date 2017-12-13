@@ -1,1 +1,9 @@
+
+Compile
+
 g++ main.cpp -o run_main `pkg-config --cflags --libs opencv`
+
+
+Run
+
+./run_main filepath
