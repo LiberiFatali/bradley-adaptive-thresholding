@@ -1,7 +1,11 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "cv.h"
-#include "highgui.h"
+// #include "cv.h"
+// #include "highgui.h"
+#include <opencv2/opencv.hpp>
+
+// #include <iostream>
+using namespace std;
 
 #define IMAGE_WIDTH  640
 #define IMAGE_HEIGHT 480
@@ -78,6 +82,8 @@ int main (int argc, char** argv)
 	IplImage* cvFrame;
 	IplImage* binImg;
 	int key;
+    // for evaluting binarization time
+    clock_t start_t, end_t;
 
 	cvFrame = cvLoadImage("image.bmp", -1);
 	binImg = cvCreateImage(cvSize(IMAGE_WIDTH, IMAGE_HEIGHT), 8, 1);
@@ -85,7 +91,10 @@ int main (int argc, char** argv)
 	cvNamedWindow("Input", 1);
 	cvNamedWindow("Output", 1);
 
+    start_t = clock();
 	adaptiveThreshold((unsigned char*)cvFrame->imageData, (unsigned char*)binImg->imageData);
+    end_t = clock();
+    cout << "Binarization time in milliseconds: " << ((double) (end_t - start_t)) * 1000 / CLOCKS_PER_SEC << "\n";
 
 	cvShowImage("Input", cvFrame);
 	cvShowImage("Output", binImg);
