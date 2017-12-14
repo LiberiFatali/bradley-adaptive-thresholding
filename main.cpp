@@ -60,7 +60,7 @@ void adaptiveThreshold(unsigned char* input, unsigned char* bin, const int IMAGE
             if (x2 >= IMAGE_WIDTH) x2 = IMAGE_WIDTH-1;
             if (y1 < 0) y1 = 0;
             if (y2 >= IMAGE_HEIGHT) y2 = IMAGE_HEIGHT-1;
-            
+
             count = (x2-x1)*(y2-y1);
 
             // I(x,y)=s(x2,y2)-s(x1,y2)-s(x2,y1)+s(x1,x1)
@@ -84,7 +84,7 @@ int main (int argc, char** argv)
     IplImage* cvFrame;
     IplImage* grayImg;
     IplImage* binImg;
-    int key;    
+    int key;
     clock_t start_t, end_t;     // to evaluate processing time
     string filepath;
 
@@ -99,19 +99,23 @@ int main (int argc, char** argv)
     }
 
     // Load color image
-    // cvFrame = cvLoadImage(filepath.c_str(), CV_LOAD_IMAGE_UNCHANGED);    
+    // cvFrame = cvLoadImage(filepath.c_str(), CV_LOAD_IMAGE_UNCHANGED);
     cvFrame = cvLoadImage(filepath.c_str(), CV_LOAD_IMAGE_COLOR);
     CvSize frameSize = cvGetSize(cvFrame);
+
+    // Warm up
+    grayImg = cvCreateImage(frameSize, IPL_DEPTH_8U, 1);
+    cvCvtColor(cvFrame, grayImg, CV_RGB2GRAY);
 
     // Convert to gray image
     start_t = clock();
     grayImg = cvCreateImage(frameSize, IPL_DEPTH_8U, 1);
     cvCvtColor(cvFrame, grayImg, CV_RGB2GRAY);
     end_t = clock();
-    cout << "Convert to gray time in milliseconds: " << ((double) (end_t - start_t)) * 1000 / CLOCKS_PER_SEC << "\n";        
+    cout << "Convert to gray time in milliseconds: " << ((double) (end_t - start_t)) * 1000 / CLOCKS_PER_SEC << "\n";
 
-    cvNamedWindow("Input", 1);
-    cvNamedWindow("Output", 1);
+    //cvNamedWindow("Input", 1);
+    //cvNamedWindow("Output", 1);
 
     // Binarization
     start_t = clock();
@@ -121,10 +125,10 @@ int main (int argc, char** argv)
     end_t = clock();
     cout << "Binarization time in milliseconds: " << ((double) (end_t - start_t)) * 1000 / CLOCKS_PER_SEC << "\n";
 
-    cvShowImage("Input", cvFrame);
-    cvShowImage("Output", binImg);
+    //cvShowImage("Input", cvFrame);
+    //cvShowImage("Output", binImg);
 
-    key = cvWaitKey(0);
+    //key = cvWaitKey(0);
 
     // Release memory
     cvReleaseImage(&cvFrame);
